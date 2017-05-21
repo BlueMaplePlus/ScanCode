@@ -165,7 +165,8 @@
                 android:id="@+id/scan_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
+                android:layout_alignRight="@+id/capture_scan_line"
+                android:layout_alignEnd="@+id/capture_scan_line" />
         </RelativeLayout>
     </RelativeLayout>
 

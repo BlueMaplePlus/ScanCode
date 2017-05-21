@@ -77,8 +77,8 @@ public class ScanManager implements SurfaceHolder.Callback{
 		this.scanMode=scanMode;
 		//启动动画
 		TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-				0.9f);
-		animation.setDuration(4500);
+				1.0f);
+		animation.setDuration(2000);
 		animation.setRepeatCount(-1);
 		animation.setRepeatMode(Animation.RESTART);
 		scanLine.startAnimation(animation);
