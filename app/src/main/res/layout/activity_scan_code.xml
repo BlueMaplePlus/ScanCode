@@ -116,7 +116,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/rescan_shape_button"
             android:padding="10dp"
-            android:text="再次扫描"
+            android:text="继续扫描"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:layout_centerHorizontal="true"
@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/top_mask"
         android:layout_above="@id/bottom_mask"
-        >
+        android:id="@+id/relativeLayout">
         <ImageView
             android:id="@+id/left_mask"
             android:layout_width="34dp"
@@ -165,9 +165,7 @@
                 android:id="@+id/scan_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignRight="@+id/capture_scan_line"
-                android:layout_alignEnd="@+id/capture_scan_line" />
+                />
         </RelativeLayout>
     </RelativeLayout>
-
 </RelativeLayout>
