@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.liang.scancode">
+    package="com.lenaeon.scancode">
 
     <!-- 二维码相关权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
