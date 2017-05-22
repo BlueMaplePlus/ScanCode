@@ -19,7 +19,7 @@
         <RelativeLayout
             android:id="@+id/title_bar"
             android:layout_width="fill_parent"
-            android:layout_height="45dip"
+            android:layout_height="45dp"
             android:background="@android:color/white" >
 
             <ImageView
@@ -30,7 +30,7 @@
                 android:layout_centerVertical="true"
                 android:background="@null"
                 android:paddingLeft="12dp"
-                android:paddingRight="20dp"
+                android:paddingRight="12dp"
                 android:src="@drawable/ic_my_returns_arrow"
                 />
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:ellipsize="middle"
-                android:text="二维码扫描"
+                android:text="商品码扫描"
                 android:textSize="18sp" />
         </RelativeLayout>
         <TextView

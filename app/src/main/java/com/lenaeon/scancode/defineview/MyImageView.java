@@ -30,7 +30,9 @@ public class MyImageView extends ImageView{
         int height = getHeight();
 
         Paint paint = new Paint();
-        paint.setColor(Color.rgb(9,187,7));
+        //paint.setColor(Color.rgb(9,187,7));
+        //paint.setColor(Color.rgb(245,75,25));
+        paint.setColor(Color.rgb(255,72,72));
         paint.setAntiAlias(true);
         paint.setStrokeWidth(t(5));
 
