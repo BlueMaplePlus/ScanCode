@@ -128,7 +128,7 @@ public class DecodeHandler extends Handler {
 		int[] pixels = source.renderThumbnail();
 		int width = source.getThumbnailWidth();
 		int height = source.getThumbnailHeight();
-		Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height-10, Bitmap.Config.ARGB_8888);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
 		bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
