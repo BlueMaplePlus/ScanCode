@@ -59,6 +59,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     TextView qrcode_g_gallery;
     TextView qrcode_ic_back;
     final int PHOTOREQUESTCODE = 1111;
+    boolean lightflag;
 
     @Bind(R.id.service_register_rescan)
     Button rescan;
@@ -85,12 +86,12 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_scan_code);
         ButterKnife.bind(this);
-        scanMode=getIntent().getIntExtra(Constant.REQUEST_SCAN_MODE,Constant.REQUEST_SCAN_MODE_ALL_MODE);
+        scanMode = getIntent().getIntExtra(Constant.REQUEST_SCAN_MODE, Constant.REQUEST_SCAN_MODE_ALL_MODE);
         initView();
     }
 
     void initView() {
-        switch (scanMode){
+        switch (scanMode) {
             case DecodeThread.BARCODE_MODE:
                 title.setText(R.string.scan_barcode_title);
                 scan_hint.setText(R.string.scan_barcode_hint);
@@ -118,7 +119,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         authorize_return.setOnClickListener(this);
         authorize_light.setOnClickListener(this);
         //构造出扫描管理器
-        scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView, scanLine, scanMode,this);
+        scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView, scanLine, scanMode, this);
     }
 
     @Override
@@ -134,6 +135,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         super.onPause();
         scanManager.onPause();
     }
+
     /**
      *
      */
@@ -157,7 +159,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         rescan.setVisibility(View.VISIBLE);
         scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
-        tv_scan_result.setText("识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText());
+        tv_scan_result.setText("识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText());
     }
 
     void startScan() {
@@ -172,7 +174,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     public void scanError(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         //相机扫描出错时
-        if(e.getMessage()!=null&&e.getMessage().startsWith("相机")){
+        if (e.getMessage() != null && e.getMessage().startsWith("相机")) {
             scanPreview.setVisibility(View.INVISIBLE);
         }
     }
@@ -206,14 +208,20 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.qrcode_g_gallery:
                 showPictures(PHOTOREQUESTCODE);
                 break;
             case R.id.iv_light:
-                scanManager.switchLight();
-                break;
             case R.id.authorize_light:
+                if (!lightflag) {
+                    lightflag = true;
+                    authorize_light.setImageResource(R.drawable.flash_on);
+                } else {
+                    lightflag = false;
+                    authorize_light.setImageResource(R.drawable.flash_off);
+                }
                 scanManager.switchLight();
                 break;
             case R.id.qrcode_ic_back:
