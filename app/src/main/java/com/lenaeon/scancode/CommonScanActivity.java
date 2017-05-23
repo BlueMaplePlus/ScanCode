@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
@@ -65,6 +66,8 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     ImageView scan_image;
     @Bind(R.id.authorize_return)
     ImageView authorize_return;
+    @Bind(R.id.authorize_light)
+    ImageView authorize_light;
     private int scanMode;//扫描模型（条形，二维码，全部）
 
     @Bind(R.id.common_title_TV_center)
@@ -73,8 +76,6 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     TextView scan_hint;
     @Bind(R.id.tv_scan_result)
     TextView tv_scan_result;
-
-
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -115,6 +116,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         iv_light.setOnClickListener(this);
         rescan.setOnClickListener(this);
         authorize_return.setOnClickListener(this);
+        authorize_light.setOnClickListener(this);
         //构造出扫描管理器
         scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView, scanLine, scanMode,this);
     }
@@ -155,7 +157,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         rescan.setVisibility(View.VISIBLE);
         scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
-        tv_scan_result.setText("识别信息："+rawResult.getText());
+        tv_scan_result.setText("识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText()+"\r\n"+"识别信息："+rawResult.getText());
     }
 
     void startScan() {
@@ -211,6 +213,9 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             case R.id.iv_light:
                 scanManager.switchLight();
                 break;
+            case R.id.authorize_light:
+                scanManager.switchLight();
+                break;
             case R.id.qrcode_ic_back:
                 finish();
                 break;
@@ -223,6 +228,41 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             default:
                 break;
         }
+    }
+
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//
+//        int action = event.getAction();
+//
+//        if (action ==KeyEvent.KEYCODE_VOLUME_DOWN) {
+//            tv_scan_result.setVisibility(View.VISIBLE);
+//            tv_scan_result.setText("+++++++++ACTION_DOWN++++++"+ count++);
+//            return true;
+//        }
+//
+//        if (action== KeyEvent.KEYCODE_VOLUME_UP) {
+//            tv_scan_result.setVisibility(View.VISIBLE);
+//            tv_scan_result.setText("+++++ACTION_UP++++++++++");
+//            return true;
+//        }
+//
+//        return super.dispatchKeyEvent(event);
+//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                startScan();
+                return true;
+
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                startScan();
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
