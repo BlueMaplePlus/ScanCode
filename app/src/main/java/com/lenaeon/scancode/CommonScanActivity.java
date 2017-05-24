@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,8 +43,12 @@ import com.lenaeon.scancode.zxing.ScanManager;
 import com.lenaeon.scancode.zxing.decode.DecodeThread;
 import com.lenaeon.scancode.zxing.decode.Utils;
 
+import java.io.ByteArrayOutputStream;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static android.R.id.message;
 
 
 /**
@@ -53,6 +58,7 @@ import butterknife.ButterKnife;
  */
 public final class CommonScanActivity extends Activity implements ScanListener, View.OnClickListener {
     static final String TAG = CommonScanActivity.class.getSimpleName();
+
     SurfaceView scanPreview = null;
     View scanContainer;
     View scanCropView;
@@ -108,8 +114,9 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 scan_hint.setText(R.string.scan_allcode_hint);
                 break;
         }
-        scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
+
         scanContainer = findViewById(R.id.capture_container);
+        scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanCropView = findViewById(R.id.capture_crop_view);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
         qrcode_g_gallery = (TextView) findViewById(R.id.qrcode_g_gallery);
@@ -129,7 +136,11 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     public void onResume() {
         super.onResume();
         scanManager.onResume();
-        rescan.setVisibility(View.INVISIBLE);
+        //rescan.setVisibility(View.INVISIBLE);
+        //rescan.setBackgroundColor(Color.parseColor("#828282"));
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
+        rescan.setClickable(false);
+
         scan_image.setVisibility(View.GONE);
     }
 
@@ -149,33 +160,50 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
 
         if (!scanManager.isScanning()) { //如果当前不是在扫描状态
             //设置再次扫描按钮出现
-            rescan.setVisibility(View.VISIBLE);
+            //rescan.setVisibility(View.VISIBLE);
             scan_image.setVisibility(View.VISIBLE);
+
             Bitmap barcode = null;
             byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
             if (compressedBitmap != null) {
                 barcode = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, null);
                 barcode = barcode.copy(Bitmap.Config.ARGB_8888, true);
             }
+
             scan_image.setImageBitmap(barcode);
         }
-        rescan.setVisibility(View.VISIBLE);
+        //rescan.setVisibility(View.VISIBLE);
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button);
+        rescan.setClickable(true);
+
         scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
-        tv_scan_result.setText("识别信息：" + rawResult.getText());
+        tv_scan_result.setText(rawResult.getText());
     }
 
     void startScan() {
-        if (rescan.getVisibility() == View.VISIBLE) {
-            rescan.setVisibility(View.INVISIBLE);
-            scan_image.setVisibility(View.GONE);
-            scanManager.reScan();
-        }
+//        if (rescan.getVisibility() == View.VISIBLE) {
+//            rescan.setVisibility(View.INVISIBLE);
+//            scan_image.setVisibility(View.GONE);
+//            scanManager.reScan();
+//        }
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
+        rescan.setClickable(false);
+
+        scan_image.setVisibility(View.GONE);
+        scanManager.reScan();
     }
 
     @Override
     public void scanError(Exception e) {
-        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        //rescan.setVisibility(View.VISIBLE);
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button);
+        rescan.setClickable(true);
+
+        scan_image.setVisibility(View.VISIBLE);
+        tv_scan_result.setVisibility(View.VISIBLE);
+        tv_scan_result.setText(e.getMessage());
         //相机扫描出错时
         if (e.getMessage() != null && e.getMessage().startsWith("相机")) {
             scanPreview.setVisibility(View.INVISIBLE);
@@ -203,13 +231,12 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PHOTOREQUESTCODE:
-
                     Uri uri = data.getData();
                     if (!TextUtils.isEmpty(uri.getAuthority())) {
                         String[] proj = {MediaStore.Images.Media.DATA};
                         Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
                         if (null == cursor) {
-                            Toast.makeText(this, "图片没找到", Toast.LENGTH_SHORT)
+                            Toast.makeText(this, "无法找到选择的图片", Toast.LENGTH_SHORT)
                                     .show();
                             return;
                         }
@@ -223,10 +250,10 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                     } else {
                         photo_path = data.getData().getPath();
                     }
-
                     scanManager.scanningImage(photo_path);
-
-
+                    //显示相册图片
+                    Bitmap bitmap = BitmapFactory.decodeFile(photo_path);
+                    scan_image.setImageBitmap(bitmap);
 
 //                    String[] proj = {MediaStore.Images.Media.DATA};
 //                    Cursor cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
@@ -303,7 +330,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 return true;
 
             case KeyEvent.KEYCODE_VOLUME_UP:
-                startScan();
+                scanManager.switchLight();
                 return true;
         }
         return super.onKeyDown(keyCode, event);

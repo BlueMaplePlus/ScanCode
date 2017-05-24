@@ -1,8 +1,13 @@
 package com.lenaeon.scancode.zxing;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -10,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -44,6 +50,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class ScanManager implements SurfaceHolder.Callback {
+    private Context context;
     boolean isHasSurface = false;
     CameraManager cameraManager;
     //用于拍摄扫描的handler
@@ -83,14 +90,6 @@ public class ScanManager implements SurfaceHolder.Callback {
         this.scanLine = scanLine;
         this.listener = listener;
         this.scanMode = scanMode;
-        //启动动画
-        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
-                0.9f);
-        animation.setDuration(1500);
-        animation.setRepeatCount(-1);
-        animation.setRepeatMode(Animation.RESTART);
-        scanLine.startAnimation(animation);
-
     }
 
     /**
@@ -154,6 +153,21 @@ public class ScanManager implements SurfaceHolder.Callback {
         if (!isHasSurface) {
             isHasSurface = true;
             initCamera(holder);
+
+            int x = mCropRect.width();
+            int y = mCropRect.height();
+
+            //启动动画
+            //int starty = scanLine.getBackground().getIntrinsicHeight() / 2;
+            int starty = scanLine.getHeight() / 2 + 10;
+            int endedy = mCropRect.height() - 20 - starty;
+            TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.ABSOLUTE, -starty, Animation.ABSOLUTE, endedy);
+            animation.setDuration(1500);
+            animation.setRepeatCount(-1);
+            animation.setRepeatMode(Animation.REVERSE);
+            scanLine.startAnimation(animation);
+
+
         }
     }
 
@@ -323,7 +337,7 @@ public class ScanManager implements SurfaceHolder.Callback {
                 } catch (Exception e) {
                     Message msg = Message.obtain();
                     msg.what = PhotoScanHandler.PHOTODECODEERROR;
-                    msg.obj = new Exception("图片有误或者图片模糊！");
+                    msg.obj = new Exception("图片有误或者图片模糊");
                     photoScanHandler.sendMessage(msg);
                 }
             }

@@ -74,8 +74,8 @@
             android:text="@string/scan_allcode_hint"
             android:textColor="#b4b4b4"
             android:textSize="14sp"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             />
 
         <TextView
@@ -134,9 +134,10 @@
             android:layout_centerHorizontal="true"
             android:text="@string/scan_result"
             android:textColor="#b4b4b4"
-            android:textSize="14sp"
-            android:paddingTop="10dp"
+            android:textSize="16sp"
+            android:paddingTop="20dp"
             android:layout_below="@id/service_register_rescan"
+            android:visibility="gone"
             />
 
     </RelativeLayout>
@@ -152,8 +153,7 @@
             android:layout_width="35dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:background="@color/scan_bg"
-            android:contentDescription="@string/app_name" />
+            android:background="@color/scan_bg" />
         <ImageView
             android:id="@+id/right_mask"
             android:layout_width="35dp"
