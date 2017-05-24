@@ -20,8 +20,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -159,7 +162,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         rescan.setVisibility(View.VISIBLE);
         scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
-        tv_scan_result.setText("识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText() + "\r\n" + "识别信息：" + rawResult.getText());
+        tv_scan_result.setText("识别信息：" + rawResult.getText());
     }
 
     void startScan() {
@@ -180,7 +183,15 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     }
 
     public void showPictures(int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+
+        Intent intent = new Intent();
+        if (Build.VERSION.SDK_INT < 19) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        } else {
+            intent.setAction(Intent.ACTION_PICK);
+        }
+
+        //Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, requestCode);
     }
@@ -192,16 +203,41 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PHOTOREQUESTCODE:
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
-                    if (cursor.moveToFirst()) {
+
+                    Uri uri = data.getData();
+                    if (!TextUtils.isEmpty(uri.getAuthority())) {
+                        String[] proj = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+                        if (null == cursor) {
+                            Toast.makeText(this, "图片没找到", Toast.LENGTH_SHORT)
+                                    .show();
+                            return;
+                        }
+                        cursor.moveToFirst();
                         int colum_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                         photo_path = cursor.getString(colum_index);
                         if (photo_path == null) {
-                            photo_path = Utils.getPath(getApplicationContext(), data.getData());
+                            photo_path = Utils.getPath(getApplicationContext(), uri);
                         }
-                        scanManager.scanningImage(photo_path);
+                        cursor.close();
+                    } else {
+                        photo_path = data.getData().getPath();
                     }
+
+                    scanManager.scanningImage(photo_path);
+
+
+
+//                    String[] proj = {MediaStore.Images.Media.DATA};
+//                    Cursor cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
+//                    if (cursor.moveToFirst()) {
+//                        int colum_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        photo_path = cursor.getString(colum_index);
+//                        if (photo_path == null) {
+//                            photo_path = Utils.getPath(getApplicationContext(), data.getData());
+//                        }
+//                        scanManager.scanningImage(photo_path);
+//                    }
             }
         }
     }

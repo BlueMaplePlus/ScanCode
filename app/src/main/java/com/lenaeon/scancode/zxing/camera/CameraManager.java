@@ -204,6 +204,10 @@ public class CameraManager {
 		return configManager.getCameraResolution();
 	}
 
+	public Point getScreenResolution() {
+		return configManager.screenResolution;
+	}
+
 	public Size getPreviewSize() {
 		if (null != camera) {
 			return camera.getParameters().getPreviewSize();

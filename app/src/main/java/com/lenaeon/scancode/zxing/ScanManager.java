@@ -2,6 +2,8 @@ package com.lenaeon.scancode.zxing;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,9 +17,13 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
+import com.google.zxing.Binarizer;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
@@ -31,8 +37,10 @@ import com.lenaeon.scancode.zxing.utils.BitmapUtil;
 import com.lenaeon.scancode.zxing.utils.CaptureActivityHandler;
 import com.lenaeon.scancode.zxing.utils.InactivityTimer;
 
+
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class ScanManager implements SurfaceHolder.Callback {
@@ -285,11 +293,11 @@ public class ScanManager implements SurfaceHolder.Callback {
     /**
      * 用于扫描本地图片二维码或者一维码
      *
-     * @param photo_path2 本地图片的所在位置
+     * @param path 本地图片的所在位置
      * @return
      */
-    public void scanningImage(final String photo_path2) {
-        if (TextUtils.isEmpty(photo_path2)) {
+    public void scanningImage(final String path) {
+        if (TextUtils.isEmpty(path)) {
             listener.scanError(new Exception("photo url is null!"));
         }
         photoScanHandler = new PhotoScanHandler(this);
@@ -297,16 +305,15 @@ public class ScanManager implements SurfaceHolder.Callback {
 
             @Override
             public void run() {
-                //获取初始化的设置器
-                Map<DecodeHintType, Object> hints = DecodeThread.getHints();
-                hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
+                Hashtable<DecodeHintType, String> hints = new Hashtable<DecodeHintType, String>();
+                hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); // 设置二维码内容的编码
 
-                //Hashtable<DecodeHintType, String> hints = new Hashtable<DecodeHintType, String>();
+                Bitmap scanBitmap = BitmapUtil.decodeBitmapFromPath(path, 200, 200);
 
-                Bitmap bitmap = BitmapUtil.decodeBitmapFromPath(photo_path2, 600, 600);
-                RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
-                BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-                QRCodeReader reader = new QRCodeReader();
+                RGBLuminanceSource source = new RGBLuminanceSource(scanBitmap);
+                Binarizer binarizer = new HybridBinarizer(source);
+                BinaryBitmap bitmap1 = new BinaryBitmap(binarizer);
+
                 MultiFormatReader multiFormatReader = new MultiFormatReader();
                 try {
                     Message msg = Message.obtain();
@@ -316,7 +323,7 @@ public class ScanManager implements SurfaceHolder.Callback {
                 } catch (Exception e) {
                     Message msg = Message.obtain();
                     msg.what = PhotoScanHandler.PHOTODECODEERROR;
-                    msg.obj = new Exception("图片有误，或者图片模糊！");
+                    msg.obj = new Exception("图片有误或者图片模糊！");
                     photoScanHandler.sendMessage(msg);
                 }
             }
