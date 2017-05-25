@@ -25,96 +25,100 @@ import com.lenaeon.scancode.R;
 import com.lenaeon.scancode.zxing.ScanManager;
 import com.lenaeon.scancode.zxing.camera.CameraManager;
 import com.lenaeon.scancode.zxing.decode.DecodeThread;
+import com.lenaeon.scancode.zxing.view.MyImageView;
+import com.lenaeon.scancode.zxing.view.MyResultPointCallback;
 
 /**
  * This class handles shouquan_ic_all the messaging which comprises the state machine for
  * capture.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public class CaptureActivityHandler extends Handler {
 
-	final ScanManager scanManager;
-	final DecodeThread decodeThread;
-	final CameraManager cameraManager;
-	State state;
+    final ScanManager scanManager;
+    final DecodeThread decodeThread;
+    final CameraManager cameraManager;
+    State state;
 
-	enum State {
-		PREVIEW, SUCCESS, DONE
-	}
+    enum State {
+        PREVIEW, SUCCESS, DONE
+    }
 
-	public CaptureActivityHandler(ScanManager scanManager, CameraManager cameraManager, int decodeMode) {
-		this.scanManager = scanManager;
-		decodeThread = new DecodeThread(scanManager, decodeMode);
-		decodeThread.start();
-		state = State.SUCCESS;
+    public CaptureActivityHandler(ScanManager scanManager, CameraManager cameraManager, int decodeMode) {
+        this.scanManager = scanManager;
 
-		// Start ourselves capturing previews and decoding.
-		this.cameraManager = cameraManager;
-		cameraManager.startPreview();
-		restartPreviewAndDecode();
-	}
+        //MyResultPointCallback myResultPointCallback = new MyResultPointCallback(scanManager.getScanView());
+        decodeThread = new DecodeThread(scanManager, decodeMode);
+        decodeThread.start();
+        state = State.SUCCESS;
 
-	@Override
-	public void handleMessage(Message message) {
-		switch (message.what) {
-		case R.id.restart_preview:
-			restartPreviewAndDecode();
-			break;
-		case R.id.decode_succeeded:
-			state = State.SUCCESS;
-			Bundle bundle = message.getData();
+        // Start ourselves capturing previews and decoding.
+        this.cameraManager = cameraManager;
+        cameraManager.startPreview();
+        restartPreviewAndDecode();
+    }
 
-			scanManager.handleDecode((Result) message.obj, bundle);
-			break;
-		case R.id.decode_failed:
-			// We're decoding as fast as possible, so when one decode fails,
-			// start another.
-			state = State.PREVIEW;
-			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-			break;
-		case R.id.decode_error:
-			scanManager.handleDecodeError((Exception)message.obj);
-			break;
-		case R.id.return_scan_result:
+    @Override
+    public void handleMessage(Message message) {
+        switch (message.what) {
+            case R.id.restart_preview:
+                restartPreviewAndDecode();
+                break;
+            case R.id.decode_succeeded:
+                state = State.SUCCESS;
+                Bundle bundle = message.getData();
+
+                scanManager.handleDecode((Result) message.obj, bundle);
+                break;
+            case R.id.decode_failed:
+                // We're decoding as fast as possible, so when one decode fails,
+                // start another.
+                state = State.PREVIEW;
+                cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+                break;
+            case R.id.decode_error:
+                scanManager.handleDecodeError((Exception) message.obj);
+                break;
+            case R.id.return_scan_result:
 //			activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
 //			activity.finish();
-			break;
-		}
-	}
+                break;
+        }
+    }
 
-	public void quitSynchronously() {
-		state = State.DONE;
-		cameraManager.stopPreview();
-		Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
-		quit.sendToTarget();
-		try {
-			// Wait at most half a shouquan_icon_second; should be enough time, and onPause()
-			// will timeout quickly
-			decodeThread.join(500L);
-		} catch (InterruptedException e) {
-			// continue
-		}
+    public void quitSynchronously() {
+        state = State.DONE;
+        cameraManager.stopPreview();
+        Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
+        quit.sendToTarget();
+        try {
+            // Wait at most half a shouquan_icon_second; should be enough time, and onPause()
+            // will timeout quickly
+            decodeThread.join(500L);
+        } catch (InterruptedException e) {
+            // continue
+        }
 
-		// Be absolutely sure we don't send any queued up messages
-		removeMessages(R.id.decode_succeeded);
-		removeMessages(R.id.decode_failed);
-	}
+        // Be absolutely sure we don't send any queued up messages
+        removeMessages(R.id.decode_succeeded);
+        removeMessages(R.id.decode_failed);
+    }
 
-	void restartPreviewAndDecode() {
-		if (state == State.SUCCESS) {
-			state = State.PREVIEW;
-			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-		}
-	}
-	/**
-	 * 
-	 * @return 返回当前扫描状态，是否可扫描,State.PREVIEW 是可扫描状态
-	 */
-	public boolean  isScanning() {
-		if(state == State.PREVIEW){
-			return true;
-		}
-		return false;
-	}
+    void restartPreviewAndDecode() {
+        if (state == State.SUCCESS) {
+            state = State.PREVIEW;
+            cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
+        }
+    }
+
+    /**
+     * @return 返回当前扫描状态，是否可扫描,State.PREVIEW 是可扫描状态
+     */
+    public boolean isScanning() {
+        if (state == State.PREVIEW) {
+            return true;
+        }
+        return false;
+    }
 }

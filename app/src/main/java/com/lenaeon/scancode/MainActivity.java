@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.lenaeon.scancode.utils.Constant;
+import com.lenaeon.scancode.zxing.utils.Constant;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

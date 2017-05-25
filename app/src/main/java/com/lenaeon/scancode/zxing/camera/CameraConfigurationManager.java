@@ -139,6 +139,7 @@ public final class CameraConfigurationManager {
      * @return
      */
     Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
+        // 获取当前手机支持的屏幕预览尺寸
         List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
         if (rawSupportedSizes == null) {
             Log.w(TAG, "Device returned no supported preview sizes; using default");
@@ -147,6 +148,7 @@ public final class CameraConfigurationManager {
         }
 
         // Sort by size, descending
+        // 对这些尺寸根据像素值（即宽乘高的值）进行从小到大排序
         List<Camera.Size> supportedPreviewSizes = new ArrayList<Camera.Size>(rawSupportedSizes);
         Collections.sort(supportedPreviewSizes, new Comparator<Camera.Size>() {
             @Override
@@ -179,6 +181,7 @@ public final class CameraConfigurationManager {
             Camera.Size supportedPreviewSize = it.next();
             int realWidth = supportedPreviewSize.width;
             int realHeight = supportedPreviewSize.height;
+            // 首先把不符合最小预览像素值的尺寸排除
             if (realWidth * realHeight < MIN_PREVIEW_PIXELS) {
                 it.remove();
                 continue;
@@ -190,6 +193,7 @@ public final class CameraConfigurationManager {
 
             double aspectRatio = (double) maybeFlippedWidth / (double) maybeFlippedHeight;
             double distortion = Math.abs(aspectRatio - screenAspectRatio);
+            // 根据宽高比判断是否满足最大误差要求（默认最大值为0.15，即宽高比默认不能超过给定比例的15%）
             if (distortion > MAX_ASPECT_DISTORTION) {
                 it.remove();
                 continue;
@@ -207,6 +211,7 @@ public final class CameraConfigurationManager {
         // of the additional computation needed. We're likely to get here on
         // newer Android 4+ devices, where
         // the CPU is much more powerful.
+        // 如果没有精确匹配到合适的尺寸，则使用最大的尺寸，这样设置便是预览图像可能产生拉伸的根本原因
         if (!supportedPreviewSizes.isEmpty()) {
             Camera.Size largestPreview = supportedPreviewSizes.get(0);
             Point largestSize = new Point(largestPreview.width, largestPreview.height);
@@ -214,6 +219,7 @@ public final class CameraConfigurationManager {
             return largestSize;
         }
 
+        // 如果没有找到合适的尺寸，就返回默认设定的尺寸
         // If there is nothing at shouquan_ic_all suitable, return current preview size
         Camera.Size defaultPreview = parameters.getPreviewSize();
         Point defaultSize = new Point(defaultPreview.width, defaultPreview.height);

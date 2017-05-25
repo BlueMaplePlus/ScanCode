@@ -30,6 +30,7 @@ import com.lenaeon.scancode.zxing.utils.BeepManager;
 import com.lenaeon.scancode.zxing.utils.BitmapUtil;
 import com.lenaeon.scancode.zxing.utils.CaptureActivityHandler;
 import com.lenaeon.scancode.zxing.utils.InactivityTimer;
+import com.lenaeon.scancode.zxing.view.MyImageView;
 
 
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class ScanManager implements SurfaceHolder.Callback {
     SurfaceView scanPreview = null;
     View scanContainer;
     View scanCropView;
+    //MyImageView scanView;
     ImageView scanLine;
     final String TAG = ScanManager.class.getSimpleName();
     Activity activity;
@@ -69,11 +71,12 @@ public class ScanManager implements SurfaceHolder.Callback {
      * @param scanLine      扫描线
      */
     public ScanManager(Activity activity, SurfaceView scanPreview, View scanContainer,
-                       View scanCropView, ImageView scanLine, int scanMode, ScanListener listener) {
+                       View scanCropView,ImageView scanLine, int scanMode, ScanListener listener) {
         this.activity = activity;
         this.scanPreview = scanPreview;
         this.scanContainer = scanContainer;
         this.scanCropView = scanCropView;
+        //this.scanView=scanView;
         this.scanLine = scanLine;
         this.listener = listener;
         this.scanMode = scanMode;
@@ -217,6 +220,13 @@ public class ScanManager implements SurfaceHolder.Callback {
         return cameraManager;
     }
 
+/*    public MyImageView getScanView() {
+        return scanView;
+    }*/
+
+    /**
+     * 截取的矩形扫描区域
+     */
     public Rect getCropRect() {
         return mCropRect;
     }

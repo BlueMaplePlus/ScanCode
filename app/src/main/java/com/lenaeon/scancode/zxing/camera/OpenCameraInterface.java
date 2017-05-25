@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lenaeon.scancode.zxing.camera.open;
+package com.lenaeon.scancode.zxing.camera;
 
 import android.hardware.Camera;
 import android.util.Log;

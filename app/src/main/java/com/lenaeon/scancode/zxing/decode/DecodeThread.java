@@ -29,76 +29,78 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import com.google.zxing.ResultPointCallback;
 import com.lenaeon.scancode.zxing.ScanManager;
 
 /**
  * This thread does shouquan_ic_all the heavy lifting of decoding the images.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public class DecodeThread extends Thread {
 
-	public static final String BARCODE_BITMAP = "barcode_bitmap";
+    public static final String BARCODE_BITMAP = "barcode_bitmap";
 
-	public static final int BARCODE_MODE = 0X100;
-	public static final int QRCODE_MODE = 0X200;
-	public static final int ALL_MODE = 0X300;
+    public static final int BARCODE_MODE = 0X100;
+    public static final int QRCODE_MODE = 0X200;
+    public static final int ALL_MODE = 0X300;
 
-	final ScanManager scanManager;
-	static  Map<DecodeHintType, Object> hints;
-	Handler handler;
-	final CountDownLatch handlerInitLatch;
+    final ScanManager scanManager;
+    static Map<DecodeHintType, Object> hints;
+    Handler handler;
+    final CountDownLatch handlerInitLatch;
 
-	public DecodeThread(ScanManager scanManager, int decodeMode) {
+    public DecodeThread(ScanManager scanManager, int decodeMode) {
 
-		this.scanManager = scanManager;
-		handlerInitLatch = new CountDownLatch(1);
+        this.scanManager = scanManager;
+        handlerInitLatch = new CountDownLatch(1);
 
-		hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+        hints = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
 
-		Collection<BarcodeFormat> decodeFormats = new ArrayList<BarcodeFormat>();
-		decodeFormats.addAll(EnumSet.of(BarcodeFormat.AZTEC));
-		decodeFormats.addAll(EnumSet.of(BarcodeFormat.PDF_417));
+        Collection<BarcodeFormat> decodeFormats = new ArrayList<BarcodeFormat>();
+        decodeFormats.addAll(EnumSet.of(BarcodeFormat.AZTEC));
+        decodeFormats.addAll(EnumSet.of(BarcodeFormat.PDF_417));
 
-		switch (decodeMode) {
-		case BARCODE_MODE:
-			decodeFormats.addAll(DecodeFormatManager.getBarCodeFormats());
-			break;
+        switch (decodeMode) {
+            case BARCODE_MODE:
+                decodeFormats.addAll(DecodeFormatManager.getBarCodeFormats());
+                break;
 
-		case QRCODE_MODE:
-			decodeFormats.addAll(DecodeFormatManager.getQrCodeFormats());
-			break;
+            case QRCODE_MODE:
+                decodeFormats.addAll(DecodeFormatManager.getQrCodeFormats());
+                break;
 
-		case ALL_MODE:
-			decodeFormats.addAll(DecodeFormatManager.getBarCodeFormats());
-			decodeFormats.addAll(DecodeFormatManager.getQrCodeFormats());
-			break;
+            case ALL_MODE:
+                decodeFormats.addAll(DecodeFormatManager.getBarCodeFormats());
+                decodeFormats.addAll(DecodeFormatManager.getQrCodeFormats());
+                break;
 
-		default:
-			break;
-		}
+            default:
+                break;
+        }
 
-		hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-	}
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+        //hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
+    }
 
-	public Handler getHandler() {
-		try {
-			handlerInitLatch.await();
-		} catch (InterruptedException ie) {
-			// continue?
-		}
-		return handler;
-	}
+    public Handler getHandler() {
+        try {
+            handlerInitLatch.await();
+        } catch (InterruptedException ie) {
+            // continue?
+        }
+        return handler;
+    }
 
-	@Override
-	public void run() {
-		Looper.prepare();
-		handler = new DecodeHandler(scanManager, hints);
-		handlerInitLatch.countDown();
-		Looper.loop();
-	}
+    @Override
+    public void run() {
+        Looper.prepare();
+        handler = new DecodeHandler(scanManager, hints);
+        handlerInitLatch.countDown();
+        Looper.loop();
+    }
 
-	public static Map<DecodeHintType, Object> getHints() {
-		return hints;
-	}
+    public static Map<DecodeHintType, Object> getHints() {
+        return hints;
+    }
 }

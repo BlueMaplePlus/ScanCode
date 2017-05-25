@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,26 +36,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
-import com.lenaeon.scancode.utils.Constant;
+import com.lenaeon.scancode.zxing.utils.Constant;
 import com.lenaeon.scancode.zxing.ScanListener;
 import com.lenaeon.scancode.zxing.ScanManager;
 import com.lenaeon.scancode.zxing.decode.DecodeThread;
 import com.lenaeon.scancode.zxing.decode.Utils;
-
-import java.io.ByteArrayOutputStream;
+import com.lenaeon.scancode.zxing.view.MyImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static android.R.id.message;
 
 
 /**
  * 二维码扫描使用
  *
  * @author 刘红亮  2015年4月29日  下午5:49:45
- * 代码调用顺序
- * CaptureActivity → CaptureActivityHandler → CameraManager → PreviewCallback → DecodeHandler → CaptureActivityHandler  → CaptureActivity
+ *         代码调用顺序
+ *         CaptureActivity → CaptureActivityHandler → CameraManager → PreviewCallback → DecodeHandler → CaptureActivityHandler  → CaptureActivity
  */
 public final class CommonScanActivity extends Activity implements ScanListener, View.OnClickListener {
     static final String TAG = CommonScanActivity.class.getSimpleName();
@@ -64,6 +60,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     SurfaceView scanPreview = null;
     View scanContainer;
     View scanCropView;
+    //MyImageView scanView;
     ImageView scanLine;
     ScanManager scanManager;
     TextView iv_light;
@@ -118,6 +115,8 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         }
 
         scanContainer = findViewById(R.id.capture_container);
+
+        //scanView = (MyImageView) findViewById(R.id.scan_image_default);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanCropView = findViewById(R.id.capture_crop_view);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
@@ -131,7 +130,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         authorize_return.setOnClickListener(this);
         authorize_light.setOnClickListener(this);
         //构造出扫描管理器
-        scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView, scanLine, scanMode, this);
+        scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView,scanLine, scanMode, this);
     }
 
     @Override

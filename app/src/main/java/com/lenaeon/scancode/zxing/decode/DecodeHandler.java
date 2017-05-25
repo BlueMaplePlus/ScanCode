@@ -91,10 +91,13 @@ public class DecodeHandler extends Handler {
         size.height = tmp;
 
         Result rawResult = null;
+        // 构造基于平面的YUV亮度源，即包含二维码区域的数据源
         PlanarYUVLuminanceSource source = buildLuminanceSource(rotatedData, size.width, size.height);
         if (source != null) {
+            // 构造二值图像比特流，使用HybridBinarizer算法解析数据源
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
             try {
+                // 采用MultiFormatReader解析图像，可以解析多种数据格式
                 rawResult = multiFormatReader.decodeWithState(bitmap);
             } catch (ReaderException re) {
                 // continue
@@ -125,24 +128,20 @@ public class DecodeHandler extends Handler {
     }
 
     /**
-     * 一个建立在适当的luminancesource对象工厂方法
+     * 建立在适当的luminancesource对象工厂方法
      *
      * 预览缓冲区的格式，被描述为camera.parameters。
      *
-     * @param data
-     *            数据预览框。
-     * @param width
-     *            宽度图像的宽度。
-     * @param height
-     *            高度图像的高度。
-     * @返回 planaryuvluminancesource 实例。
-     * A factory method to build the appropriate LuminanceSource object based on
-     * the format of the preview buffers, as described by Camera.Parameters.
-     *
+     * @param data   数据预览框。
+     * @param width  宽度图像的宽度。
+     * @param height 高度图像的高度。
      * @param data   A preview frame.
      * @param width  The width of the image.
      * @param height The height of the image.
      * @return A PlanarYUVLuminanceSource instance.
+     * @返回 planaryuvluminancesource 实例。
+     * A factory method to build the appropriate LuminanceSource object based on
+     * the format of the preview buffers, as described by Camera.Parameters.
      */
     public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
         Rect rect = scanManager.getCropRect();
@@ -150,11 +149,14 @@ public class DecodeHandler extends Handler {
             return null;
         }
         // Go ahead and assume it's YUV rather than die.
+        // 高解码效率和速度，采用了裁剪无用区域的方式
         return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top, rect.width(), rect.height(), false);
+        // 直接返回整幅图像的数据，而不计算聚焦框大小
+        //return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
     }
 
 
-    //获取灰度缩略图
+    // 获取灰度缩略图
     static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
         int[] pixels = source.renderThumbnail();
         int width = source.getThumbnailWidth();
@@ -164,10 +166,11 @@ public class DecodeHandler extends Handler {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
         bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
+
     }
 
 
-    //获取彩色缩略图
+    // 获取彩色缩略图
     static void bundleOriginal(PlanarYUVLuminanceSource source, Bundle bundle) {
         int[] pixels = source.renderThumbnail();
         int width = source.getThumbnailWidth();
@@ -177,7 +180,6 @@ public class DecodeHandler extends Handler {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
         bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
-
     }
 
 }

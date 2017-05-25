@@ -1,4 +1,4 @@
-package com.lenaeon.scancode.utils;
+package com.lenaeon.scancode.zxing.utils;
 
 /**
  * Created by 刘红亮 on 2015/9/24 14:08.

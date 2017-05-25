@@ -175,8 +175,13 @@
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
                 android:background="@drawable/scanning_line" />
-            <com.lenaeon.scancode.defineview.MyImageView
+            <com.lenaeon.scancode.zxing.view.MyImageView
                 android:id="@+id/scan_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+            <com.lenaeon.scancode.zxing.view.MyImageView
+                android:id="@+id/scan_image_default"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
