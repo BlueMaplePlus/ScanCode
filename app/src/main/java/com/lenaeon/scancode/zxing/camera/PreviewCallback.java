@@ -24,32 +24,35 @@ import android.util.Log;
 
 public class PreviewCallback implements Camera.PreviewCallback {
 
-	static final String TAG = PreviewCallback.class.getSimpleName();
+    static final String TAG = PreviewCallback.class.getSimpleName();
 
-	final CameraConfigurationManager configManager;
-	Handler previewHandler;
-	int previewMessage;
+    final CameraConfigurationManager configManager;
+    Handler previewHandler;
+    int previewMessage;
 
-	public PreviewCallback(CameraConfigurationManager configManager) {
-		this.configManager = configManager;
-	}
+    public PreviewCallback(CameraConfigurationManager configManager) {
+        this.configManager = configManager;
+    }
 
-	public void setHandler(Handler previewHandler, int previewMessage) {
-		this.previewHandler = previewHandler;
-		this.previewMessage = previewMessage;
-	}
+    public void setHandler(Handler previewHandler, int previewMessage) {
+        this.previewHandler = previewHandler;
+        this.previewMessage = previewMessage;
+    }
 
-	@Override
-	public void onPreviewFrame(byte[] data, Camera camera) {
-		Point cameraResolution = configManager.getCameraResolution();
-		Handler thePreviewHandler = previewHandler;
-		if (cameraResolution != null && thePreviewHandler != null) {
-			Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x, cameraResolution.y, data);
-			message.sendToTarget();
-			previewHandler = null;
-		} else {
-			Log.d(TAG, "Got preview callback, but no handler or resolution available");
-		}
-	}
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera) {
+
+        Point cameraResolution = configManager.getCameraResolution();
+        Handler thePreviewHandler = previewHandler;
+
+        if (cameraResolution != null && thePreviewHandler != null) {
+            //给DecodeHandler发消息
+            Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x, cameraResolution.y, data);
+            message.sendToTarget();
+            previewHandler = null;
+        } else {
+            Log.d(TAG, "Got preview callback, but no handler or resolution available");
+        }
+    }
 
 }

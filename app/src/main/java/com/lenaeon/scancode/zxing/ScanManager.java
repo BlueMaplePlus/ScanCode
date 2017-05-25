@@ -3,19 +3,12 @@ package com.lenaeon.scancode.zxing;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -25,17 +18,12 @@ import android.widget.ImageView;
 
 import com.google.zxing.Binarizer;
 import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
-import com.google.zxing.FormatException;
 import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 import com.lenaeon.scancode.R;
 import com.lenaeon.scancode.zxing.camera.CameraManager;
-import com.lenaeon.scancode.zxing.decode.DecodeThread;
 import com.lenaeon.scancode.zxing.decode.PhotoScanHandler;
 import com.lenaeon.scancode.zxing.decode.RGBLuminanceSource;
 import com.lenaeon.scancode.zxing.utils.BeepManager;
@@ -47,7 +35,6 @@ import com.lenaeon.scancode.zxing.utils.InactivityTimer;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Hashtable;
-import java.util.Map;
 
 public class ScanManager implements SurfaceHolder.Callback {
     private Context context;
@@ -157,7 +144,7 @@ public class ScanManager implements SurfaceHolder.Callback {
             int x = mCropRect.width();
             int y = mCropRect.height();
 
-            //启动动画
+            //扫描线启动动画效果 by LiuZXBIZ 20170525
             //int starty = scanLine.getBackground().getIntrinsicHeight() / 2;
             int starty = scanLine.getHeight() / 2 + 10;
             int endedy = mCropRect.height() - 20 - starty;
@@ -166,8 +153,6 @@ public class ScanManager implements SurfaceHolder.Callback {
             animation.setRepeatCount(-1);
             animation.setRepeatMode(Animation.REVERSE);
             scanLine.startAnimation(animation);
-
-
         }
     }
 
@@ -283,12 +268,14 @@ public class ScanManager implements SurfaceHolder.Callback {
         int y = cropTop * cameraHeight / containerHeight;
 
         /** 计算最终截取的矩形的宽度 */
-        int width = cropWidth * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的高度 */
-        int height = cropHeight * cameraHeight / containerHeight;
-
+        //int width = cropWidth * cameraWidth / containerWidth;
+        //** 计算最终截取的矩形的高度 */
+        //int height = cropHeight * cameraHeight / containerHeight;
         /** 生成最终的截取的矩形 */
-        mCropRect = new Rect(x, y, width + x, height + y);
+        //mCropRect = new Rect(x, y, width + x, height + y);
+
+        /** 修改最终的截取的矩形 by LiuZXBIZ 20170525*/
+        mCropRect = new Rect(x, y, cropWidth + x, cropHeight + y);
     }
 
     int getStatusBarHeight() {

@@ -37,8 +37,6 @@ import com.lenaeon.scancode.zxing.ScanManager;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
-import static android.R.attr.height;
-
 public class DecodeHandler extends Handler {
 
     final ScanManager scanManager;
@@ -58,6 +56,7 @@ public class DecodeHandler extends Handler {
         }
         switch (message.what) {
             case R.id.decode:
+                //解码摄像头返回的图片信息
                 decode((byte[]) message.obj, message.arg1, message.arg2);
                 break;
             case R.id.quit:
@@ -110,8 +109,10 @@ public class DecodeHandler extends Handler {
             if (handler != null) {
                 Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
                 Bundle bundle = new Bundle();
-                bundleThumbnail(source, bundle);
+                //bundleThumbnail(source, bundle);
+                bundleOriginal(source, bundle);
                 message.setData(bundle);
+
                 message.sendToTarget();
             }
         } else {
@@ -123,19 +124,18 @@ public class DecodeHandler extends Handler {
 
     }
 
-    //获取缩略图
-    static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
-        int[] pixels = source.renderThumbnail();
-        int width = source.getThumbnailWidth();
-        int height = source.getThumbnailHeight();
-        Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
-        bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
-    }
-
-
     /**
+     * 一个建立在适当的luminancesource对象工厂方法
+     *
+     * 预览缓冲区的格式，被描述为camera.parameters。
+     *
+     * @param data
+     *            数据预览框。
+     * @param width
+     *            宽度图像的宽度。
+     * @param height
+     *            高度图像的高度。
+     * @返回 planaryuvluminancesource 实例。
      * A factory method to build the appropriate LuminanceSource object based on
      * the format of the preview buffers, as described by Camera.Parameters.
      *
@@ -151,6 +151,33 @@ public class DecodeHandler extends Handler {
         }
         // Go ahead and assume it's YUV rather than die.
         return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top, rect.width(), rect.height(), false);
+    }
+
+
+    //获取灰度缩略图
+    static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
+        int[] pixels = source.renderThumbnail();
+        int width = source.getThumbnailWidth();
+        int height = source.getThumbnailHeight();
+        //Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+        bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
+    }
+
+
+    //获取彩色缩略图
+    static void bundleOriginal(PlanarYUVLuminanceSource source, Bundle bundle) {
+        int[] pixels = source.renderThumbnail();
+        int width = source.getThumbnailWidth();
+        int height = source.getThumbnailHeight();
+        //Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+        bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
+
     }
 
 }

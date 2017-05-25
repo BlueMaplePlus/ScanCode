@@ -55,6 +55,8 @@ import static android.R.id.message;
  * 二维码扫描使用
  *
  * @author 刘红亮  2015年4月29日  下午5:49:45
+ * 代码调用顺序
+ * CaptureActivity → CaptureActivityHandler → CameraManager → PreviewCallback → DecodeHandler → CaptureActivityHandler  → CaptureActivity
  */
 public final class CommonScanActivity extends Activity implements ScanListener, View.OnClickListener {
     static final String TAG = CommonScanActivity.class.getSimpleName();
