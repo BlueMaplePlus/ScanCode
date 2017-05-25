@@ -275,7 +275,7 @@ public class ScanManager implements SurfaceHolder.Callback {
         //mCropRect = new Rect(x, y, width + x, height + y);
 
         /** 修改最终的截取的矩形 by LiuZXBIZ 20170525*/
-        mCropRect = new Rect(x, y, cropWidth + x, cropHeight + y);
+        mCropRect = new Rect(x, y, x + cropWidth, y + cropHeight);
     }
 
     int getStatusBarHeight() {
