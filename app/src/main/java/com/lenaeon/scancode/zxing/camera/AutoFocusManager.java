@@ -31,8 +31,8 @@ public class AutoFocusManager implements Camera.AutoFocusCallback {
 
     static final String TAG = AutoFocusManager.class.getSimpleName();
 
-    /* 自动聚集时间间隔设置 */
-    static final long AUTO_FOCUS_INTERVAL_MS = 300L;
+    /* 自动相机聚集时间间隔设置 */
+    static final long AUTO_FOCUS_INTERVAL_MS = 200L;
     static final Collection<String> FOCUS_MODES_CALLING_AF;
 
     static {

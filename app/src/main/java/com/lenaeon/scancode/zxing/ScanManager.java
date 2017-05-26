@@ -69,7 +69,7 @@ public class ScanManager implements SurfaceHolder.Callback {
      * @param scanLine      扫描线
      */
     public ScanManager(Activity activity, SurfaceView scanPreview, View scanContainer,
-                       View scanCropView,ImageView scanLine, int scanMode, ScanListener listener) {
+                       View scanCropView, ImageView scanLine, int scanMode, ScanListener listener) {
         this.activity = activity;
         this.scanPreview = scanPreview;
         this.scanContainer = scanContainer;
@@ -252,12 +252,22 @@ public class ScanManager implements SurfaceHolder.Callback {
         int cameraWidth = cameraManager.getCameraResolution().y;
         int cameraHeight = cameraManager.getCameraResolution().x;
 
+
         /** 获取布局中扫描框的位置信息 */
         int[] location = new int[2];
         scanCropView.getLocationInWindow(location);
 
         int cropLeft = location[0];
-        int cropTop = location[1] - getStatusBarHeight();
+        int cropTop = location[1];
+        /**
+         * 界面Activity模式采用全屏模式
+         * android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+         * 预览图片才不会压缩显示，否则当解码完毕后的截图存在变形错觉
+         *
+         * int statusBarHeight = getStatusBarHeight();
+         * int cropTop = location[1] - statusBarHeight;
+         *
+         * */
 
         int cropWidth = scanCropView.getWidth();
         int cropHeight = scanCropView.getHeight();
