@@ -41,7 +41,6 @@ import com.lenaeon.scancode.zxing.ScanListener;
 import com.lenaeon.scancode.zxing.ScanManager;
 import com.lenaeon.scancode.zxing.decode.DecodeThread;
 import com.lenaeon.scancode.zxing.decode.Utils;
-import com.lenaeon.scancode.zxing.view.MyImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,7 +59,6 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     SurfaceView scanPreview = null;
     View scanContainer;
     View scanCropView;
-    //MyImageView scanView;
     ImageView scanLine;
     ScanManager scanManager;
     TextView iv_light;
@@ -116,7 +114,6 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
 
         scanContainer = findViewById(R.id.capture_container);
 
-        //scanView = (MyImageView) findViewById(R.id.scan_image_default);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanCropView = findViewById(R.id.capture_crop_view);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);

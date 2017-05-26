@@ -30,7 +30,6 @@ import com.lenaeon.scancode.zxing.utils.BeepManager;
 import com.lenaeon.scancode.zxing.utils.BitmapUtil;
 import com.lenaeon.scancode.zxing.utils.CaptureActivityHandler;
 import com.lenaeon.scancode.zxing.utils.InactivityTimer;
-import com.lenaeon.scancode.zxing.view.MyImageView;
 
 
 import java.io.IOException;
@@ -51,7 +50,6 @@ public class ScanManager implements SurfaceHolder.Callback {
     SurfaceView scanPreview = null;
     View scanContainer;
     View scanCropView;
-    //MyImageView scanView;
     ImageView scanLine;
     final String TAG = ScanManager.class.getSimpleName();
     Activity activity;
@@ -76,7 +74,6 @@ public class ScanManager implements SurfaceHolder.Callback {
         this.scanPreview = scanPreview;
         this.scanContainer = scanContainer;
         this.scanCropView = scanCropView;
-        //this.scanView=scanView;
         this.scanLine = scanLine;
         this.listener = listener;
         this.scanMode = scanMode;
@@ -150,7 +147,7 @@ public class ScanManager implements SurfaceHolder.Callback {
             //扫描线启动动画效果 by LiuZXBIZ 20170525
             //int starty = scanLine.getBackground().getIntrinsicHeight() / 2;
             int starty = scanLine.getHeight() / 2 + 10;
-            int endedy = mCropRect.height() - 20 - starty;
+            int endedy = mCropRect.height() - 5 - starty;
             TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.ABSOLUTE, -starty, Animation.ABSOLUTE, endedy);
             animation.setDuration(1500);
             animation.setRepeatCount(-1);
@@ -220,9 +217,6 @@ public class ScanManager implements SurfaceHolder.Callback {
         return cameraManager;
     }
 
-/*    public MyImageView getScanView() {
-        return scanView;
-    }*/
 
     /**
      * 截取的矩形扫描区域

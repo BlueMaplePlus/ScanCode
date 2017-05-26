@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
-                android:background="@drawable/scanning_line" />
+                android:background="@drawable/qrcode_scan_line" />
             <com.lenaeon.scancode.zxing.view.MyImageView
                 android:id="@+id/scan_image"
                 android:layout_width="match_parent"

@@ -25,8 +25,6 @@ import com.lenaeon.scancode.R;
 import com.lenaeon.scancode.zxing.ScanManager;
 import com.lenaeon.scancode.zxing.camera.CameraManager;
 import com.lenaeon.scancode.zxing.decode.DecodeThread;
-import com.lenaeon.scancode.zxing.view.MyImageView;
-import com.lenaeon.scancode.zxing.view.MyResultPointCallback;
 
 /**
  * This class handles shouquan_ic_all the messaging which comprises the state machine for
@@ -48,7 +46,6 @@ public class CaptureActivityHandler extends Handler {
     public CaptureActivityHandler(ScanManager scanManager, CameraManager cameraManager, int decodeMode) {
         this.scanManager = scanManager;
 
-        //MyResultPointCallback myResultPointCallback = new MyResultPointCallback(scanManager.getScanView());
         decodeThread = new DecodeThread(scanManager, decodeMode);
         decodeThread.start();
         state = State.SUCCESS;
