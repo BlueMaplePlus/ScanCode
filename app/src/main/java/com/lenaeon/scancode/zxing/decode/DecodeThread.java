@@ -80,7 +80,6 @@ public class DecodeThread extends Thread {
         }
 
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-        //hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
     }
 
     public Handler getHandler() {

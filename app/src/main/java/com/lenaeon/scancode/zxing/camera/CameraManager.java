@@ -212,7 +212,7 @@ public class CameraManager {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 打开闪光灯
 	 */
