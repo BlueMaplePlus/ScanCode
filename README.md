@@ -4,17 +4,8 @@
 
 #代码优点
 
-    扫描界面布局xml完成，可自行订制！
-    不乱码，不变形！
-    扫描后可得到扫描的截图！
-    支持连续扫描！
-    在一个项目中可多处使用，根据CommonScanActivity在多写一个自己的扫描界面就行了！
-
-#项目截图
-
-![](https://github.com/liang530/ScanCode/raw/master/images/main.png)<br/>
-![](https://github.com/liang530/ScanCode/raw/master/images/createCode.png)<br/>
-![](https://github.com/liang530/ScanCode/raw/master/images/scanCode.png)<br/>
-![](https://github.com/liang530/ScanCode/raw/master/images/scan2code.png)<br/>
-![](https://github.com/liang530/ScanCode/raw/master/images/scan_bar_code.png)<br/>
-![](https://github.com/liang530/ScanCode/raw/master/images/scan_photo.png)<br/>
+    1、扫描界面布局xml完成，可自行订制；
+    2、不乱码，不变形；
+    3、扫描后可得到扫描的截图；
+    4、支持连续扫描；
+    5、在一个项目中可多处使用，根据CommonScanActivity在多写一个自己的扫描界面就行；
