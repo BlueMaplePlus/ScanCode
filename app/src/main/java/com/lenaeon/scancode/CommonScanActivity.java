@@ -141,10 +141,9 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         scanManager.onResume();
         //rescan.setVisibility(View.INVISIBLE);
         //rescan.setBackgroundColor(Color.parseColor("#828282"));
+
         rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
         rescan.setClickable(false);
-
-        scan_image.setVisibility(View.GONE);
     }
 
     @Override
@@ -167,6 +166,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             rescan.setBackgroundResource(R.drawable.rescan_shape_button);
             rescan.setClickable(true);
 
+
             Bitmap barcode = null;
             byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
             if (compressedBitmap != null) {
@@ -175,34 +175,33 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             }
 
             scan_image.setImageBitmap(barcode);
+            scan_image.setVisibility(View.VISIBLE);
         }
-        scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
         tv_scan_result.setText(rawResult.getText());
-    }
-
-    void startScan() {
-        if (rescan.isClickable()) {
-            rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
-            rescan.setClickable(false);
-            scan_image.setVisibility(View.GONE);
-            scanManager.reScan();
-        }
     }
 
     @Override
     public void scanError(Exception e) {
         //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         //rescan.setVisibility(View.VISIBLE);
-        rescan.setBackgroundResource(R.drawable.rescan_shape_button);
-        rescan.setClickable(true);
 
-        scan_image.setVisibility(View.VISIBLE);
+        scan_image.setVisibility(View.GONE);
+
         tv_scan_result.setVisibility(View.VISIBLE);
         tv_scan_result.setText(e.getMessage());
         //相机扫描出错时
         if (e.getMessage() != null && e.getMessage().startsWith("相机")) {
             scanPreview.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    void startScan() {
+        if (rescan.isClickable()) {
+            scan_image.setVisibility(View.GONE);
+            rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
+            rescan.setClickable(false);
+            scanManager.reScan();
         }
     }
 
@@ -246,9 +245,10 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                     }
                     // 识别相册图片
                     scanManager.scanningImage(photo_path);
+
                     //显示相册图片
-                    Bitmap bitmap = BitmapFactory.decodeFile(photo_path);
-                    scan_image.setImageBitmap(bitmap);
+                    //Bitmap bitmap = BitmapFactory.decodeFile(photo_path);
+                    //scan_image.setImageBitmap(bitmap);
             }
         }
     }

@@ -112,8 +112,7 @@ public class DecodeHandler extends Handler {
             if (handler != null) {
                 Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
                 Bundle bundle = new Bundle();
-                //bundleThumbnail(source, bundle);
-                bundleOriginal(source, bundle);
+                bundleThumbnail(source, bundle);
                 message.setData(bundle);
 
                 message.sendToTarget();
@@ -170,16 +169,5 @@ public class DecodeHandler extends Handler {
     }
 
 
-    // 获取彩色缩略图
-    static void bundleOriginal(PlanarYUVLuminanceSource source, Bundle bundle) {
-        int[] pixels = source.renderThumbnail();
-        int width = source.getThumbnailWidth();
-        int height = source.getThumbnailHeight();
-        //Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
-        Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.ARGB_8888);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-        bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
-    }
 
 }

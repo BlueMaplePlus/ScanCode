@@ -181,14 +181,6 @@ public class CameraManager {
 		}
 	}
 
-	public synchronized void pausetPreviewFrame(Handler handler, int message) {
-		Camera theCamera = camera;
-		if (theCamera != null && previewing) {
-			previewCallback.setHandler(handler, message);
-			theCamera.setOneShotPreviewCallback(previewCallback);
-		}
-	}
-
 	/**
 	 * Allows third party apps to specify the camera ID, rather than determine
 	 * it automatically based on available cameras and their orientation.

@@ -74,6 +74,7 @@ public class CaptureActivityHandler extends Handler {
                 cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
                 break;
             case R.id.decode_error:
+                state = State.PREVIEW;
                 scanManager.handleDecodeError((Exception) message.obj);
                 break;
             case R.id.return_scan_result:
