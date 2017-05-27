@@ -41,7 +41,7 @@ public class DecodeHandler extends Handler {
 
     final ScanManager scanManager;
     final MultiFormatReader multiFormatReader;
-    boolean running = true;
+    public boolean running = true;
 
     public DecodeHandler(ScanManager scanManager, Map<DecodeHintType, Object> hints) {
         multiFormatReader = new MultiFormatReader();
@@ -129,7 +129,7 @@ public class DecodeHandler extends Handler {
 
     /**
      * 建立在适当的luminancesource对象工厂方法
-     *
+     * <p>
      * 预览缓冲区的格式，被描述为camera.parameters。
      *
      * @param data   数据预览框。

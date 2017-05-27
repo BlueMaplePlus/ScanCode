@@ -45,9 +45,7 @@ public class CameraManager {
 
 	boolean initialized;
 	boolean previewing;
-	
-	
-	
+
 	int requestedCameraId = -1;
 	/**
 	 * Preview frames are delivered here, which we pass on to the registered
@@ -174,6 +172,16 @@ public class CameraManager {
 	 *            The what field of the message to be sent.
 	 */
 	public synchronized void requestPreviewFrame(Handler handler, int message) {
+		Camera theCamera = camera;
+		if (theCamera != null && previewing) {
+			//autoFocusManager.start();
+			camera.startPreview();
+			previewCallback.setHandler(handler, message);
+			theCamera.setOneShotPreviewCallback(previewCallback);
+		}
+	}
+
+	public synchronized void pausetPreviewFrame(Handler handler, int message) {
 		Camera theCamera = camera;
 		if (theCamera != null && previewing) {
 			previewCallback.setHandler(handler, message);

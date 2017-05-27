@@ -60,7 +60,6 @@ public class DecodeThread extends Thread {
         Collection<BarcodeFormat> decodeFormats = new ArrayList<BarcodeFormat>();
         decodeFormats.addAll(EnumSet.of(BarcodeFormat.AZTEC));
         decodeFormats.addAll(EnumSet.of(BarcodeFormat.PDF_417));
-
         switch (decodeMode) {
             case BARCODE_MODE:
                 decodeFormats.addAll(DecodeFormatManager.getBarCodeFormats());

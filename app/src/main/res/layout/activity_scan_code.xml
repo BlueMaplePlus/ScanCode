@@ -29,8 +29,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:background="@null"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:src="@drawable/ic_my_returns_arrow"
                 />
             <TextView
@@ -49,8 +49,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@null"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:src="@drawable/flash_default"
                 android:clickable="true"
 

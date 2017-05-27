@@ -55,6 +55,7 @@ public class ScanManager implements SurfaceHolder.Callback {
     Activity activity;
     ScanListener listener;
     boolean isOpenLight = false;
+    TranslateAnimation animation=null;
 
     private int scanMode;//扫描模型（条形，二维码，全部）
 
@@ -148,13 +149,14 @@ public class ScanManager implements SurfaceHolder.Callback {
             //int starty = scanLine.getBackground().getIntrinsicHeight() / 2;
             int starty = scanLine.getHeight() / 2 + 10;
             int endedy = mCropRect.height() - 5 - starty;
-            TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.ABSOLUTE, -starty, Animation.ABSOLUTE, endedy);
+            animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.ABSOLUTE, -starty, Animation.ABSOLUTE, endedy);
             animation.setDuration(1500);
             animation.setRepeatCount(-1);
             animation.setRepeatMode(Animation.REVERSE);
             scanLine.startAnimation(animation);
         }
     }
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -320,10 +322,12 @@ public class ScanManager implements SurfaceHolder.Callback {
 
             @Override
             public void run() {
-                Hashtable<DecodeHintType, String> hints = new Hashtable<DecodeHintType, String>();
-                hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); // 设置二维码内容的编码
 
-                Bitmap scanBitmap = BitmapUtil.decodeBitmapFromPath(path, 200, 200);
+                // 设置二维码内容的编码
+                Hashtable<DecodeHintType, String> hints = new Hashtable<DecodeHintType, String>();
+                hints.put(DecodeHintType.CHARACTER_SET, "UTF8");
+
+                Bitmap scanBitmap=BitmapUtil.decodeBitmapFromPath(path, 200, 200);
 
                 RGBLuminanceSource source = new RGBLuminanceSource(scanBitmap);
                 Binarizer binarizer = new HybridBinarizer(source);
@@ -332,7 +336,7 @@ public class ScanManager implements SurfaceHolder.Callback {
                 MultiFormatReader multiFormatReader = new MultiFormatReader();
                 try {
                     Message msg = Message.obtain();
-                    msg.what = PhotoScanHandler.PHOTODECODEOK;
+                    msg.what = PhotoScanHandler.PHOTODECODESUCCESS;
                     msg.obj = multiFormatReader.decode(bitmap1, hints);
                     photoScanHandler.sendMessage(msg);
                 } catch (Exception e) {
@@ -360,5 +364,4 @@ public class ScanManager implements SurfaceHolder.Callback {
         }
         return false;
     }
-
 }

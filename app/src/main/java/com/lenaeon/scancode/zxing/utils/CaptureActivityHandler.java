@@ -65,7 +65,6 @@ public class CaptureActivityHandler extends Handler {
             case R.id.decode_succeeded:
                 state = State.SUCCESS;
                 Bundle bundle = message.getData();
-
                 scanManager.handleDecode((Result) message.obj, bundle);
                 break;
             case R.id.decode_failed:
@@ -78,8 +77,8 @@ public class CaptureActivityHandler extends Handler {
                 scanManager.handleDecodeError((Exception) message.obj);
                 break;
             case R.id.return_scan_result:
-//			activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-//			activity.finish();
+//                activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
+//                activity.finish();
                 break;
         }
     }
@@ -103,7 +102,7 @@ public class CaptureActivityHandler extends Handler {
     }
 
     void restartPreviewAndDecode() {
-        if (state == State.SUCCESS) {
+        if (state == State.SUCCESS ) {
             state = State.PREVIEW;
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
         }

@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.util.Arrays;
+
 /**
  * Created by 刘红亮 on 2015/7/23 22:30.
  */

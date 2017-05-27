@@ -46,7 +46,7 @@ public class PreviewCallback implements Camera.PreviewCallback {
         Handler thePreviewHandler = previewHandler;
 
         if (cameraResolution != null && thePreviewHandler != null) {
-            //给DecodeHandler发消息
+            //给DecodeHandler发解码消息
             Message message = thePreviewHandler.obtainMessage(previewMessage, cameraResolution.x, cameraResolution.y, data);
             message.sendToTarget();
             previewHandler = null;
