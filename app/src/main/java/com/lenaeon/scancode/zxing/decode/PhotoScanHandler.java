@@ -6,6 +6,7 @@ import android.os.Message;
 
 import com.google.zxing.Result;
 
+import com.lenaeon.scancode.R;
 import com.lenaeon.scancode.zxing.ScanManager;
 
 public class PhotoScanHandler extends Handler{
@@ -24,6 +25,7 @@ public class PhotoScanHandler extends Handler{
 			break;
 		case PHOTODECODESUCCESS:
 			Bundle bundle = message.getData();
+            bundle.putInt("type", R.id.decode_photo);
 			scanManager.handleDecode((Result) message.obj, bundle);
 			break;
 		default:

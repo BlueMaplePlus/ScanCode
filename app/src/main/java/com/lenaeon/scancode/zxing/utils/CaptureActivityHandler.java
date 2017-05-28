@@ -65,6 +65,7 @@ public class CaptureActivityHandler extends Handler {
             case R.id.decode_succeeded:
                 state = State.SUCCESS;
                 Bundle bundle = message.getData();
+                bundle.putInt("type", R.id.decode_camera);
                 scanManager.handleDecode((Result) message.obj, bundle);
                 break;
             case R.id.decode_failed:
