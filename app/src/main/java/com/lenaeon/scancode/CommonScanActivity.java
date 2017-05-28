@@ -264,8 +264,6 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 showPictures(PHOTOREQUESTCODE);
                 break;
             case R.id.iv_light:
-                scanManager.beepManager.playBeepSoundAndVibrate();
-                break;
             case R.id.authorize_light:
                 lightflag = !lightflag;
                 int imageSource = (lightflag ? R.drawable.flash_on : R.drawable.flash_off);
