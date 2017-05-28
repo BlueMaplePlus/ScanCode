@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -263,6 +264,8 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 showPictures(PHOTOREQUESTCODE);
                 break;
             case R.id.iv_light:
+                scanManager.beepManager.playBeepSoundAndVibrate();
+                break;
             case R.id.authorize_light:
                 lightflag = !lightflag;
                 int imageSource = (lightflag ? R.drawable.flash_on : R.drawable.flash_off);
@@ -283,27 +286,27 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         }
     }
 
-//    @Override
-//    public boolean dispatchKeyEvent(KeyEvent event) {
-//
-//        int action = event.getAction();
-//
-//        if (action ==KeyEvent.KEYCODE_VOLUME_DOWN) {
-//            tv_scan_result.setVisibility(View.VISIBLE);
-//            tv_scan_result.setText("+++++++++ACTION_DOWN++++++"+ count++);
-//            return true;
-//        }
-//
-//        if (action== KeyEvent.KEYCODE_VOLUME_UP) {
-//            tv_scan_result.setVisibility(View.VISIBLE);
-//            tv_scan_result.setText("+++++ACTION_UP++++++++++");
-//            return true;
-//        }
-//
-//        return super.dispatchKeyEvent(event);
-//    }
+/*    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
 
-    @Override
+        int action = event.getAction();
+
+        if (action ==KeyEvent.KEYCODE_VOLUME_DOWN) {
+            tv_scan_result.setVisibility(View.VISIBLE);
+            tv_scan_result.setText("+++++++++ACTION_DOWN++++++"+ count++);
+            return true;
+        }
+
+        if (action== KeyEvent.KEYCODE_VOLUME_UP) {
+            tv_scan_result.setVisibility(View.VISIBLE);
+            tv_scan_result.setText("+++++ACTION_UP++++++++++");
+            return true;
+        }
+
+        return super.dispatchKeyEvent(event);
+    }*/
+
+/*    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -315,5 +318,5 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 }
