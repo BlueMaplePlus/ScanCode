@@ -142,9 +142,9 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         //rescan.setVisibility(View.INVISIBLE);
         //rescan.setBackgroundColor(Color.parseColor("#828282"));
 
-
         rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
         rescan.setClickable(false);
+        rescan.setText(rescan.isClickable() ? R.string.scan_continue : R.string.scan_running);
 
         scan_image.setVisibility(View.GONE);
     }
@@ -168,6 +168,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             // 设置再次扫描按钮出现
             rescan.setBackgroundResource(R.drawable.rescan_shape_button);
             rescan.setClickable(true);
+            rescan.setText(rescan.isClickable() ? R.string.scan_continue : R.string.scan_running);
 
             Bitmap barcode = null;
             byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
@@ -201,6 +202,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             scan_image.setVisibility(View.GONE);
             rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
             rescan.setClickable(false);
+            rescan.setText(rescan.isClickable() ? R.string.scan_continue : R.string.scan_running);
             scanManager.reScan();
         }
     }

@@ -8,5 +8,7 @@
     <string name="scan_qrcode_hint">将二维码对入取景框即可自动扫描</string>
     <string name="scan_allcode_hint">将二维码或条形码对入取景框即可自动扫描</string>
     <string name="scan_result">识别结果</string>
+    <string name="scan_running">正在扫描</string>
+    <string name="scan_continue">继续扫描</string>
 
 </resources>
