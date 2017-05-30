@@ -30,11 +30,11 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/home_bottom_home_bn"
+                android:id="@+id/home_footer_home_btn"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:background="@drawable/footer_btn_cloud"
+                android:background="@drawable/footer_cloud_btn"
                 android:clickable="true" />
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:background="@drawable/footer_btn_message"
+                android:background="@drawable/footer_message_btn"
                 android:clickable="true" />
 
             <TextView
@@ -96,7 +96,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:clickable="true"
-                android:src="@drawable/footer_btn_scan" />
+                android:src="@drawable/footer_scan_btn" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +112,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:background="@drawable/footer_btn_report"
+                android:background="@drawable/footer_report_btn"
                 android:clickable="true" />
 
             <TextView
@@ -142,7 +142,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:background="@drawable/footer_btn_user"
+                android:background="@drawable/footer_user_btn"
                 android:clickable="true" />
 
             <TextView
