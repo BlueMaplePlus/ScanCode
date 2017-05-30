@@ -102,10 +102,10 @@
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/arr_2"
                     android:drawableLeft="@drawable/actionbar_letter_lv"
-                    android:text="6"
+                    android:text="199"
                     android:textColor="#989898"
                     android:textSize="12sp"
-                    android:textStyle="bold|italic"/>
+                    android:textStyle="italic"/>
 
                 <ImageView
                     android:id="@+id/arr_2"
