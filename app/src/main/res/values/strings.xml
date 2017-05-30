@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">销售系统</string>
+    <string name="company_name">蓝昂网络</string>
 
     <string name="scan_barcode_title">条形码扫描</string>
     <string name="scan_qrcode_title">二维码扫描</string>
@@ -17,8 +18,8 @@
     <string name="home_footbar_report">报 表</string>
     <string name="home_footbar_user">设 置</string>
 
-    <string name="action_search">搜索</string>
-    <string name="action_more">更多</string>
+    <string name="action_search">搜 索</string>
+    <string name="action_more">设 置</string>
 
     <string name="slide_menu_sign">签到</string>
     <string name="slide_menu_mymsg">我的消息</string>

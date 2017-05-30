@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,9 +52,7 @@ public class MainActivity extends Activity {
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
         actionBar = getActionBar();
-        slideMenu = (DrawerLayout) findViewById(R.id.slide_menu);
-
-
+        slideMenu = (DrawerLayout) findViewById(R.id.slide_menu_layout);
         slideMenu.setScrimColor(Color.argb(50, 0, 0, 0));
 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -211,7 +208,7 @@ public class MainActivity extends Activity {
                 home_footer_user_btn.setSelected(true);
                 home_footer_user_txt.setSelected(true);
                 initHomeFooterBtn();
-                //弹出菜单项目
+                //弹出菜单项目 当android:showAsAction="never"时方才有效
                 //openOptionsMenu();
                 //simulateKey(KeyEvent.KEYCODE_MENU);
                 break;
@@ -224,6 +221,17 @@ public class MainActivity extends Activity {
                 break;
         }
     }
+/*
+    @Override
+    public void openOptionsMenu() {
+        super.openOptionsMenu();
+        // TODO: 2015-07-25 菜单选择
+        if (slideMenu.isDrawerOpen(Gravity.LEFT)) {
+            slideMenu.closeDrawer(Gravity.LEFT);
+        } else {
+            slideMenu.openDrawer(Gravity.LEFT);
+        }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -231,6 +239,7 @@ public class MainActivity extends Activity {
 
         if (id == R.id.action_search) {
             // TODO: 2015-07-25 搜索界面
+            showSettings();
         } else if (id == R.id.action_menu) {
             // TODO: 2015-07-25 菜单选择
             if (slideMenu.isDrawerOpen(Gravity.LEFT)) {
@@ -239,8 +248,19 @@ public class MainActivity extends Activity {
                 slideMenu.openDrawer(Gravity.LEFT);
             }
         }
-
         return true;
+    }
+
+
+    /**
+     * 显示系统设置菜单项
+     */
+    private void showSettings() {
+        final Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
+        settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+        startActivity(settings);
     }
 
     public static void simulateKey(final int KeyCode) {
