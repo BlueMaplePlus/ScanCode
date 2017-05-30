@@ -24,11 +24,11 @@
     <string name="slide_menu_sign">签到</string>
     <string name="slide_menu_mymsg">我的消息</string>
     <string name="slide_menu_lv">我的等级</string>
-    <string name="slide_menu_pay_music">付费音乐包</string>
+    <string name="slide_menu_pay_music">我的积分</string>
     <string name="slide_menu_integral_mall">积分商城</string>
-    <string name="slide_menu_mycloud">我的音乐云盘</string>
-    <string name="slide_menu_recognize">听歌识曲</string>
-    <string name="slide_menu_stop_time">定时停止播放</string>
-    <string name="slide_menu_setting">设置</string>
+    <string name="slide_menu_mycloud">收货地址</string>
+    <string name="slide_menu_recognize">登录密码</string>
+    <string name="slide_menu_stop_time">支付密码</string>
+    <string name="slide_menu_setting">个人资料</string>
     <string name="slide_menu_exit">退出应用</string>
 </resources>

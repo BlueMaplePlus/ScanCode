@@ -131,7 +131,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/arr_3"
-                    android:text="尚未订购"
+                    android:text="3980分"
                     android:textColor="#B9B9B9"
                     android:textSize="12sp"/>
 
@@ -159,8 +159,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/arr_4"
-                    android:text="68积分"
-                    android:textColor="#B9B9B9"
+                    android:text="399积分兑口水巾"
+                    android:textColor="#0dbbf5"
                     android:textSize="12sp"/>
 
                 <ImageView
