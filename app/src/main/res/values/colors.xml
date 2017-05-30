@@ -2,4 +2,8 @@
 <resources>
     <color name="scan_bg">#7f000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
+
+    <color name="textColor_selected">#ffff4e4a</color>
+    <color name="textColor_unselected">#7f000000</color>
 </resources>

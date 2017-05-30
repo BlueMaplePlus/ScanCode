@@ -11,4 +11,9 @@
     <string name="scan_running">正在扫描</string>
     <string name="scan_continue">继续扫描</string>
 
+
+    <string name="home_footbar_cloud">首 页</string>
+    <string name="home_footbar_message">消 息</string>
+    <string name="home_footbar_report">报 表</string>
+    <string name="home_footbar_user">设 置</string>
 </resources>
