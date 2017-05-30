@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="light_gray">#f0f0f0</color>
+
+
     <color name="scan_bg">#7f000000</color>
+    <color name="base_color">#f45725</color>
+
+    <color name="transparent">#00000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+
+    <color name="actionbar_background">@color/base_color</color>
+    <color name="actionbar_selected">#e44816</color>
 
 
     <color name="textColor_selected">#ffff4e4a</color>
