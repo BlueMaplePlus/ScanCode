@@ -20,14 +20,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -39,11 +36,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
-import com.lenaeon.scancode.zxing.utils.Constant;
 import com.lenaeon.scancode.zxing.ScanListener;
 import com.lenaeon.scancode.zxing.ScanManager;
 import com.lenaeon.scancode.zxing.decode.DecodeThread;
 import com.lenaeon.scancode.zxing.decode.Utils;
+import com.lenaeon.scancode.zxing.utils.Constant;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -62,6 +59,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
     SurfaceView scanPreview = null;
     View scanContainer;
     View scanCropView;
+    //MyImageView scanView;
     ImageView scanLine;
     ScanManager scanManager;
     TextView iv_light;
@@ -93,9 +91,6 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        // 设置全屏模式
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_scan_code);
         ButterKnife.bind(this);
         scanMode = getIntent().getIntExtra(Constant.REQUEST_SCAN_MODE, Constant.REQUEST_SCAN_MODE_ALL_MODE);
@@ -120,6 +115,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
 
         scanContainer = findViewById(R.id.capture_container);
 
+        //scanView = (MyImageView) findViewById(R.id.scan_image_default);
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
         scanCropView = findViewById(R.id.capture_crop_view);
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
@@ -133,7 +129,7 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         authorize_return.setOnClickListener(this);
         authorize_light.setOnClickListener(this);
         //构造出扫描管理器
-        scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView, scanLine, scanMode, this);
+        scanManager = new ScanManager(this, scanPreview, scanContainer, scanCropView,scanLine, scanMode, this);
     }
 
     @Override
@@ -142,10 +138,8 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         scanManager.onResume();
         //rescan.setVisibility(View.INVISIBLE);
         //rescan.setBackgroundColor(Color.parseColor("#828282"));
-
         rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
         rescan.setClickable(false);
-        rescan.setText(rescan.isClickable() ? R.string.scan_continue : R.string.scan_running);
 
         scan_image.setVisibility(View.GONE);
     }
@@ -164,12 +158,10 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         //scanManager.reScan();
 //		Toast.makeText(that, "result="+rawResult.getText(), Toast.LENGTH_LONG).show();
 
-        if (!scanManager.isScanning() && bundle.getInt("type") == R.id.decode_camera) {
-            // 如果当前不是在扫描状态
-            // 设置再次扫描按钮出现
-            rescan.setBackgroundResource(R.drawable.rescan_shape_button);
-            rescan.setClickable(true);
-            rescan.setText(rescan.isClickable() ? R.string.scan_continue : R.string.scan_running);
+        if (!scanManager.isScanning()) { //如果当前不是在扫描状态
+            //设置再次扫描按钮出现
+            //rescan.setVisibility(View.VISIBLE);
+            scan_image.setVisibility(View.VISIBLE);
 
             Bitmap barcode = null;
             byte[] compressedBitmap = bundle.getByteArray(DecodeThread.BARCODE_BITMAP);
@@ -179,17 +171,37 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
             }
 
             scan_image.setImageBitmap(barcode);
-            scan_image.setVisibility(View.VISIBLE);
         }
+        //rescan.setVisibility(View.VISIBLE);
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button);
+        rescan.setClickable(true);
+
+        scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
         tv_scan_result.setText(rawResult.getText());
+    }
+
+    void startScan() {
+//        if (rescan.getVisibility() == View.VISIBLE) {
+//            rescan.setVisibility(View.INVISIBLE);
+//            scan_image.setVisibility(View.GONE);
+//            scanManager.reScan();
+//        }
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
+        rescan.setClickable(false);
+
+        scan_image.setVisibility(View.GONE);
+        scanManager.reScan();
     }
 
     @Override
     public void scanError(Exception e) {
         //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         //rescan.setVisibility(View.VISIBLE);
+        rescan.setBackgroundResource(R.drawable.rescan_shape_button);
+        rescan.setClickable(true);
 
+        scan_image.setVisibility(View.VISIBLE);
         tv_scan_result.setVisibility(View.VISIBLE);
         tv_scan_result.setText(e.getMessage());
         //相机扫描出错时
@@ -198,24 +210,16 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         }
     }
 
-    void startScan() {
-        if (rescan.isClickable()) {
-            scan_image.setVisibility(View.GONE);
-            rescan.setBackgroundResource(R.drawable.rescan_shape_button_off);
-            rescan.setClickable(false);
-            rescan.setText(rescan.isClickable() ? R.string.scan_continue : R.string.scan_running);
-            scanManager.reScan();
-        }
-    }
-
     public void showPictures(int requestCode) {
-        //显示相册选择对话框
+
         Intent intent = new Intent();
         if (Build.VERSION.SDK_INT < 19) {
             intent.setAction(Intent.ACTION_GET_CONTENT);
         } else {
             intent.setAction(Intent.ACTION_PICK);
         }
+
+        //Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, requestCode);
     }
@@ -246,12 +250,21 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                     } else {
                         photo_path = data.getData().getPath();
                     }
-                    // 识别相册图片
                     scanManager.scanningImage(photo_path);
-
                     //显示相册图片
-                    //Bitmap bitmap = BitmapFactory.decodeFile(photo_path);
-                    //scan_image.setImageBitmap(bitmap);
+                    Bitmap bitmap = BitmapFactory.decodeFile(photo_path);
+                    scan_image.setImageBitmap(bitmap);
+
+//                    String[] proj = {MediaStore.Images.Media.DATA};
+//                    Cursor cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
+//                    if (cursor.moveToFirst()) {
+//                        int colum_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        photo_path = cursor.getString(colum_index);
+//                        if (photo_path == null) {
+//                            photo_path = Utils.getPath(getApplicationContext(), data.getData());
+//                        }
+//                        scanManager.scanningImage(photo_path);
+//                    }
             }
         }
     }
@@ -265,9 +278,13 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 break;
             case R.id.iv_light:
             case R.id.authorize_light:
-                lightflag = !lightflag;
-                int imageSource = (lightflag ? R.drawable.flash_on : R.drawable.flash_off);
-                authorize_light.setImageResource(imageSource);
+                if (!lightflag) {
+                    lightflag = true;
+                    authorize_light.setImageResource(R.drawable.flash_on);
+                } else {
+                    lightflag = false;
+                    authorize_light.setImageResource(R.drawable.flash_off);
+                }
                 scanManager.switchLight();
                 break;
             case R.id.qrcode_ic_back:
@@ -284,14 +301,14 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         }
     }
 
-/*    @Override
+    @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
 
         int action = event.getAction();
 
         if (action ==KeyEvent.KEYCODE_VOLUME_DOWN) {
             tv_scan_result.setVisibility(View.VISIBLE);
-            tv_scan_result.setText("+++++++++ACTION_DOWN++++++"+ count++);
+            tv_scan_result.setText("+++++++++ACTION_DOWN++++++");
             return true;
         }
 
@@ -302,11 +319,12 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         }
 
         return super.dispatchKeyEvent(event);
-    }*/
+    }
 
-/*    @Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
+
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 startScan();
                 return true;
@@ -316,5 +334,6 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
                 return true;
         }
         return super.onKeyDown(keyCode, event);
-    }*/
+    }
+
 }
