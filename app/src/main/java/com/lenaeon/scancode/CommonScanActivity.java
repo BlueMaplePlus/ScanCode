@@ -308,5 +308,4 @@ public final class CommonScanActivity extends Activity implements ScanListener, 
         }
         return super.onKeyDown(keyCode, event);
     }*/
-
 }
